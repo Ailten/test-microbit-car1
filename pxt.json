@@ -1,0 +1,27 @@
+{
+    "name": "test-microbit-car1",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*",
+        "maqueen": "github:dfrobot/pxt-maqueen#v1.7.16",
+        "neopixel": "github:microsoft/pxt-neopixel#v0.7.6"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "8.0.18",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+}
