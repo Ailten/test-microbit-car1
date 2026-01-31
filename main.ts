@@ -1,9 +1,13 @@
-function evalObstacle () {
-    delayToObstacleSensor = input.runningTime() - timeWhenLastObstacleSensor
-    if (delayToObstacleSensor > 1000) {
-        timeWhenLastObstacleSensor = input.runningTime()
-        distanceObstacle = maqueen.Ultrasonic()
+function walkUntilWall () {
+    if (maqueen.Ultrasonic() < 5) {
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
+    } else {
+        maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, motorSpeed)
     }
+}
+function writeDistance () {
+    basic.showNumber(maqueen.Ultrasonic())
 }
 function rotate90 () {
     for (let index = 0; index < 270; index++) {
@@ -11,23 +15,21 @@ function rotate90 () {
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
     }
 }
-let timeWhenLastObstacleSensor = 0
-let delayToObstacleSensor = 0
-let distanceObstacle = 0
-distanceObstacle = 0
-let motorSpeed = 60
-let strip = neopixel.create(DigitalPin.P15, 24, NeoPixelMode.RGB)
-delayToObstacleSensor = 0
-timeWhenLastObstacleSensor = 0
-basic.forever(function () {
-    evalObstacle()
-    if (distanceObstacle < 30) {
+function followRoad () {
+    if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) != 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 50)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
+    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) != 0) {
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 50)
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
     } else {
-        for (let index = 0; index < 4; index++) {
-            maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, motorSpeed)
-        }
+        maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, motorSpeed)
     }
-    strip.showRainbow(1, 360)
+}
+let motorSpeed = 0
+motorSpeed = 60
+let strip = neopixel.create(DigitalPin.P15, 24, NeoPixelMode.RGB)
+basic.forever(function () {
+    writeDistance()
+    strip.showColor(neopixel.colors(NeoPixelColors.Red))
 })
